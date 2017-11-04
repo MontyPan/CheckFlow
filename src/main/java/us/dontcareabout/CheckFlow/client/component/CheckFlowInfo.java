@@ -116,7 +116,7 @@ public class CheckFlowInfo extends DrawComponent {
 		localProgress(getOffsetWidth());
 
 		progressWidth = progress.getText().length() * NUMBER_SIZE / 2;
-		progressBG.setHeight(HEIGHT * checkFlow.getProgress() - 10);
+		progressBG.setHeight((HEIGHT - 10 ) * checkFlow.getProgress());
 		progressBG.setY(HEIGHT - progressBG.getHeight() - 5);
 	}
 
