@@ -51,15 +51,24 @@ public class CheckFlow implements Serializable {
 		this.deadline = deadline;
 	}
 
-	public double getProgress() {
-		int count = 0;
-		int total = getPointList().size();
+	/**
+	 * @return 目前尚未完成的 {@link CheckPoint} 的 index（從 0 開始）。
+	 * 	如果全部都完成，會回傳 {@link #getPointList()} 的 size。
+	 */
+	public int getUnfinishPointIndex() {
+		int i = 0;
 
-		for (CheckPoint cp : getPointList()) {
-			if (cp.isFinish()) { count++; }
+		for (; i < getPointList().size(); i++) {
+			if (!getPointList().get(i).isFinish()) {
+				break;
+			}
 		}
 
-		return total == 0 ? 0 : count * 1.0 / total;
+		return i;
+	}
+
+	public double getProgress() {
+		return 1.0 * getUnfinishPointIndex() / getPointList().size();
 	}
 
 	public boolean isEnable() {
