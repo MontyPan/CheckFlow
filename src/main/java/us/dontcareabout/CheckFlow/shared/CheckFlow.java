@@ -67,6 +67,11 @@ public class CheckFlow implements Serializable {
 		return i;
 	}
 
+	public CheckPoint getUnfinishPoint() {
+		int index = getUnfinishPointIndex();
+		return index == getPointList().size() ? null : getPointList().get(index);
+	}
+
 	public double getProgress() {
 		return 1.0 * getUnfinishPointIndex() / getPointList().size();
 	}
