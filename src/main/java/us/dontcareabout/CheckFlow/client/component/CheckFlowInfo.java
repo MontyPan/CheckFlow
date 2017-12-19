@@ -4,18 +4,19 @@ import java.util.Date;
 
 import com.google.gwt.i18n.client.NumberFormat;
 import com.sencha.gxt.chart.client.draw.Color;
-import com.sencha.gxt.chart.client.draw.DrawComponent;
 import com.sencha.gxt.chart.client.draw.RGB;
-import com.sencha.gxt.chart.client.draw.sprite.RectangleSprite;
-import com.sencha.gxt.chart.client.draw.sprite.TextSprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite.TextBaseline;
 
 import us.dontcareabout.CheckFlow.client.DateUtil;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
-import us.dontcareabout.CheckFlow.shared.CheckPoint;
+import us.dontcareabout.gxt.client.draw.LRectangleSprite;
+import us.dontcareabout.gxt.client.draw.LTextSprite;
+import us.dontcareabout.gxt.client.draw.LayerSprite;
 
-public class CheckFlowInfo extends DrawComponent {
-	private static final int HEIGHT = 140;
+public class CheckFlowInfo extends LayerSprite {
+	public static final int HEIGHT = 140;
+
+	private static final NumberFormat NUMBER_FORMAT = NumberFormat.getFormat("###");
 	private static final int NAME_SIZE = 40;
 	private static final int NUMBER_SIZE = 60;
 	private static final int FOOTER_SIZE = 18;
@@ -25,141 +26,124 @@ public class CheckFlowInfo extends DrawComponent {
 		new Color("#8e0000"), new Color("#c62828"), new Color("#ff5f52")
 	};
 
-	private TextSprite name = new TextSprite();
-	private TextSprite nowCheckPoint = new TextSprite();
-	private TextSprite reciprocal = new TextSprite();
-	private TextSprite reciprocalDay = new TextSprite("天");
-	private RectangleSprite reciprocalBG = new RectangleSprite(NUMBER_SIZE * 1.5 + 30, HEIGHT - 10);
-	private TextSprite progress = new TextSprite();
-	private TextSprite progressRatio = new TextSprite("%");
-	private RectangleSprite progressBG = new RectangleSprite(NUMBER_SIZE * 1.5 + 30, HEIGHT - 10);
+	private LTextSprite name = new LTextSprite();
+	private LTextSprite nowCheckPoint = new LTextSprite();
+	private Block reciprocal = new Block("天");
+	private Block progress = new Block("%");
 
 	private CheckFlow checkFlow;
-	private int reciprocalWidth = 0;
-	private int progressWidth = 0;
 
 	public CheckFlowInfo() {
-		reciprocalBG.setZIndex(0);
-		reciprocalBG.setY(5);
-		addSprite(reciprocalBG);
-
-		progressBG.setZIndex(0);
-		progressBG.setFill(BLUE);
-		addSprite(progressBG);
-
 		name.setTextBaseline(TextBaseline.MIDDLE);
 		name.setFontSize(NAME_SIZE);
-		name.setX(20);
-		name.setY(45);
-		addSprite(name);
+		name.setLX(20);
+		name.setLY(45);
+		add(name);
 
 		nowCheckPoint.setTextBaseline(TextBaseline.MIDDLE);
 		nowCheckPoint.setFontSize(FOOTER_SIZE);
-		nowCheckPoint.setX(40);
-		nowCheckPoint.setY(95);
-		addSprite(nowCheckPoint);
+		nowCheckPoint.setLX(40);
+		nowCheckPoint.setLY(95);
+		add(nowCheckPoint);
 
-		progress.setTextBaseline(TextBaseline.MIDDLE);
-		progress.setFontSize(NUMBER_SIZE);
-		progress.setY(60);
-		addSprite(progress);
-
-		progressRatio.setTextBaseline(TextBaseline.MIDDLE);
-		progressRatio.setFontSize(FOOTER_SIZE);
-		progressRatio.setY(115);
-		addSprite(progressRatio);
-
-		reciprocal.setTextBaseline(TextBaseline.MIDDLE);
-		reciprocal.setFontSize(NUMBER_SIZE);
-		reciprocal.setY(60);
-		addSprite(reciprocal);
-
-		reciprocalDay.setTextBaseline(TextBaseline.MIDDLE);
-		reciprocalDay.setFontSize(FOOTER_SIZE);
-		reciprocalDay.setY(115);
-		addSprite(reciprocalDay);
+		add(progress);
+		add(reciprocal);
 	}
 
 	public void setData(CheckFlow cf) {
 		checkFlow = cf;
 		name.setText(cf.getName());
 
-		for (CheckPoint cp : cf.getPointList()) {
-			if (!cp.isFinish()) {
-				nowCheckPoint.setText("→ " + cp.getName());
-				break;
-			}
+		if (checkFlow.getUnfinishPoint() != null) {
+			nowCheckPoint.setText("→ " + checkFlow.getUnfinishPoint().getName());
 		}
 
 		drawProgress();
 		drawReciprocal();
-		redrawSurface();
 	}
 
 	@Override
-	protected void onResize(int width, int height) {
+	protected void adjustMember() {
 		//目前不考慮高度變化
 		//TODO 寬度過小時 name 與 nowCheckPoint 要縮減字
 
-		localProgress(width);
-		progressBG.setX(width - reciprocalBG.getWidth() - progressBG.getWidth() - 10);
-		progressRatio.setX(width - reciprocalBG.getWidth() - 45);
-
-		localReciprocal(width);
-		reciprocalDay.setX(width - FOOTER_SIZE - 20);
-		reciprocalBG.setX(width - reciprocalBG.getWidth() - 5);
-		super.onResize(width, height);
+		progress.setLX(getWidth() - reciprocal.getWidth() - progress.getWidth() - 10);
+		reciprocal.setLX(getWidth() - reciprocal.getWidth() - 5);
 	}
 
 	private void drawProgress() {
-		progress.setText(NumberFormat.getFormat("##").format(checkFlow.getProgress() * 100));
-		localProgress(getOffsetWidth());
-
-		progressWidth = progress.getText().length() * NUMBER_SIZE / 2;
-		progressBG.setHeight((HEIGHT - 10 ) * checkFlow.getProgress());
-		progressBG.setY(HEIGHT - progressBG.getHeight() - 5);
-	}
-
-	private void localProgress(int width) {
-		progress.setX(width - reciprocalBG.getWidth() - progressWidth - 25);
+		progress.setProgress(checkFlow.getProgress());
 	}
 
 	private void drawReciprocal() {
 		final int duration = 7;
 
 		if (checkFlow.getDeadline() == null) {
-			reciprocal.setText("？");
-			reciprocal.setFill(RGB.BLACK);
-			reciprocalBG.setFill(RGB.WHITE);
-			reciprocalWidth = NUMBER_SIZE;
-			localReciprocal(getOffsetWidth());
+			reciprocal.setNumber(Double.NaN);
+			reciprocal.text.setFill(RGB.BLACK);
+			reciprocal.setBgColor(RGB.WHITE);
 			return;
 		}
 
 		int diff = DateUtil.daysBetween(checkFlow.getDeadline(), new Date());
 
-		reciprocal.setText("" + Math.abs(diff));	//都顯示正數，用顏色來區分
-		reciprocalWidth = reciprocal.getText().length() * NUMBER_SIZE / 2;
+		reciprocal.setNumber(Math.abs(diff));
 		Color textColor = RGB.BLACK;
 
 		if (diff >= duration) {
-			reciprocalBG.setFill(RGB.WHITE);
+			reciprocal.setBgColor(RGB.WHITE);
 		} else if (diff >= 0) {
 			int value = (int)((3.0 * diff / duration) % 3);
-			reciprocalBG.setFill(RED[value]);
+			reciprocal.setBgColor(RED[value]);
 			if (value < 2) { textColor = RGB.WHITE; }
 		} else {
-			reciprocalBG.setFill(BLACK);
+			reciprocal.setBgColor(BLACK);
 			textColor = RGB.WHITE;
 		}
 
-		reciprocal.setFill(textColor);
-		reciprocalDay.setFill(textColor);
-
-		localReciprocal(getOffsetWidth());
+		reciprocal.text.setFill(textColor);
+		reciprocal.footer.setFill(textColor);
 	}
 
-	private void localReciprocal(int width) {
-		reciprocal.setX(width - reciprocalWidth - 20);
+	private class Block extends LayerSprite {
+		LTextSprite text = new LTextSprite();
+		LTextSprite footer = new LTextSprite();
+		LRectangleSprite progress = new LRectangleSprite();
+
+		Block(String footerString) {
+			setWidth(NUMBER_SIZE * 1.5 + 30);
+			setHeight(HEIGHT - 10);
+			setLY(5);
+
+			progress.setWidth(getWidth());
+			progress.setFill(BLUE);
+			add(progress);
+
+			text.setTextBaseline(TextBaseline.MIDDLE);
+			text.setFontSize(NUMBER_SIZE);
+			text.setLY(50);
+			add(text);
+
+			footer.setText(footerString);
+			footer.setTextBaseline(TextBaseline.MIDDLE);
+			footer.setFontSize(FOOTER_SIZE);
+			footer.setLX(getWidth() - FOOTER_SIZE - 20);
+			footer.setLY(105);
+			add(footer);
+		}
+
+		void setNumber(double value) {
+			boolean isNaN = Double.isNaN(value);
+			text.setText(isNaN ? "？" : NUMBER_FORMAT.format(value));
+			double textWidth = isNaN ? NUMBER_SIZE :
+				text.getText().length() * NUMBER_SIZE / 2;
+			text.setLX(getWidth() - textWidth - 20);
+		}
+
+		void setProgress(double value) {
+			setNumber(value * 100);
+			progress.setHeight(getHeight() * value);
+			progress.setLY(getHeight() - progress.getHeight());
+		}
 	}
 }
