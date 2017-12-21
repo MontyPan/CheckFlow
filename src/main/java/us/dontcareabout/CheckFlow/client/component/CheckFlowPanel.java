@@ -9,6 +9,7 @@ import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelectionHandler;
 
 import us.dontcareabout.CheckFlow.client.DateUtil;
+import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.CheckFlow.shared.CheckPoint;
 import us.dontcareabout.gxt.client.draw.Cursor;
@@ -35,25 +36,31 @@ public class CheckFlowPanel extends LayerContainer {
 	private NowLayer nowLayer = new NowLayer();
 	private NotNowLayer nextLayer = new NotNowLayer(RED[1]);
 
-	public CheckFlowPanel(CheckFlow checkFlow) {
-		int index = checkFlow.getUnfinishPointIndex();
+	private CheckFlow checkFlow;
 
+	public CheckFlowPanel() {
 		prevLayer.setLX(50);
 		prevLayer.setLY(0);
-		prevLayer.setData(checkFlow.getPointList().get(index - 1));
 
 		nowLayer.setLX(5);
 		nowLayer.setLY(40);
 		nowLayer.setLZIndex(50);
-		nowLayer.setData(checkFlow.getPointList().get(index));
 
 		nextLayer.setLX(50);
 		nextLayer.setLY(430);
-		nextLayer.setData(checkFlow.getPointList().get(index + 1));
 
 		this.addLayer(prevLayer);
 		this.addLayer(nowLayer);
 		this.addLayer(nextLayer);
+	}
+
+	public void setData(CheckFlow cf) {
+		checkFlow = cf;
+
+		int index = checkFlow.getUnfinishPointIndex();
+		prevLayer.setData(checkFlow.getPointList().get(index - 1));
+		nowLayer.setData(checkFlow.getPointList().get(index));
+		nextLayer.setData(checkFlow.getPointList().get(index + 1));
 
 		redrawSurfaceForced();	//zIndex 靈異現象的萬惡解
 	}
@@ -130,10 +137,20 @@ public class CheckFlowPanel extends LayerContainer {
 		public void setData(CheckPoint checkPoint) {
 			super.setData(checkPoint);
 
+			//清空 CheckItemLayer 們
+			for (CheckItemLayer layer : itemLayers) {
+				remove(layer);
+			}
+
+			itemLayers.clear();
+			////
+
 			for (int i = 0; i < checkPoint.getItemList().size(); i++) {
 				CheckItemLayer cil = new CheckItemLayer(checkPoint.getItemList().get(i));
 				add(cil);
 				itemLayers.add(cil);
+				//還沒有真正掛到 DrawComponent 上去，所以補作
+				cil.deploy(CheckFlowPanel.this);
 			}
 
 			adjustMember();
