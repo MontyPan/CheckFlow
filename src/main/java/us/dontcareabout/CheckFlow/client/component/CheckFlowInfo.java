@@ -60,6 +60,7 @@ public class CheckFlowInfo extends LayerSprite {
 
 		drawProgress();
 		drawReciprocal();
+		adjustMember();
 	}
 
 	@Override
