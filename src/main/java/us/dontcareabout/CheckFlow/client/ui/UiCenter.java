@@ -12,10 +12,10 @@ public class UiCenter {
 
 	public static void start() {
 		RootPanel.get().add(viewport);
-		checkFlowList();
+		checkFlowView();
 	}
 
-	public static void checkFlowList() {
+	public static void checkFlowView() {
 		if (checkFlowView == null) {
 			checkFlowView = new CheckFlowView();
 		}
