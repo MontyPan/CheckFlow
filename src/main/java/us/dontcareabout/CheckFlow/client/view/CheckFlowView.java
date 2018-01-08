@@ -8,6 +8,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
 import us.dontcareabout.CheckFlow.client.component.CheckFlowInfo;
 import us.dontcareabout.CheckFlow.client.component.TextButton;
+import us.dontcareabout.CheckFlow.client.component.Toolbar;
 import us.dontcareabout.CheckFlow.client.data.CheckFlowReadyEvent;
 import us.dontcareabout.CheckFlow.client.data.CheckFlowReadyEvent.CheckFlowReadyHandler;
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
@@ -18,13 +19,15 @@ import us.dontcareabout.gxt.client.draw.LayerSprite;
 
 public class CheckFlowView extends VerticalLayoutContainer {
 	private CheckFlowList list = new CheckFlowList();
+	private Toolbar toolbar = new Toolbar();
 	private VerticalLayoutContainer main = new VerticalLayoutContainer();
 
 	public CheckFlowView() {
 		main.add(list, new VerticalLayoutData(1, -1));
 		main.setScrollMode(ScrollMode.AUTOY);
 		add(main, new VerticalLayoutData(1, 1));
-		add(new Toolbar(), new VerticalLayoutData(1, 80));
+		add(toolbar, new VerticalLayoutData(1, 80));
+		buildToolbar();
 
 		DataCenter.addCheckFlowReady(new CheckFlowReadyHandler() {
 			@Override
@@ -32,6 +35,13 @@ public class CheckFlowView extends VerticalLayoutContainer {
 				checkFlowReady(event.data);
 			}
 		});
+	}
+
+	private void buildToolbar() {
+		ToolItem add = new ToolItem("新增專案");
+		ToolItem checkTemplate = new ToolItem("流程範本管理");
+		toolbar.add(add);
+		toolbar.add(checkTemplate);
 	}
 
 	private void checkFlowReady(ArrayList<CheckFlow> checkFlows) {
@@ -78,39 +88,6 @@ public class CheckFlowView extends VerticalLayoutContainer {
 			setBgColor(RGB.LIGHTGRAY);
 			setBgRadius(20);
 			setMargin(20);
-		}
-	}
-
-	class Toolbar extends LayerContainer {
-		ToolItem add = new ToolItem("新增專案");
-		ToolItem checkTemplate = new ToolItem("流程範本管理");
-
-		ArrayList<LayerSprite> items = new ArrayList<>();
-
-		public Toolbar() {
-			add(add);
-			add(checkTemplate);
-		}
-
-		@Override
-		protected void onResize(int width, int height) {
-			//Refactory 抽去 GF：HorizontalLayer
-			final int margin = 10;
-			double wUnit = width / items.size() - margin * 2;
-			int index = 0;
-
-			for (LayerSprite btn : items) {
-				btn.onResize(wUnit, height);
-				btn.setLX(margin + index * (wUnit + margin * 2));
-				index++;
-			}
-
-			super.onResize(width, height);
-		}
-
-		private void add(LayerSprite item) {
-			addLayer(item);
-			items.add(item);
 		}
 	}
 }
