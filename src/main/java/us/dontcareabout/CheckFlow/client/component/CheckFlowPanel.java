@@ -9,7 +9,7 @@ import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelectionHandler;
 
 import us.dontcareabout.CheckFlow.client.DateUtil;
-import us.dontcareabout.CheckFlow.client.ui.UiCenter;
+import us.dontcareabout.CheckFlow.client.Palette;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.CheckFlow.shared.CheckPoint;
 import us.dontcareabout.gxt.client.draw.Cursor;
@@ -21,20 +21,10 @@ public class CheckFlowPanel extends LayerContainer {
 	private static final int ITEM_HEIGHT = 50;
 
 	//Refactory
-	private static final Color BLUE = new Color("#58a5f0");
-	private static final Color[] PURPLE = {
-		new Color("#790e8b"), new Color("#ab47bc"), new Color("#df78ef")
-	};	//400
-	private static final Color[] RED = {
-		new Color("#8e0000"), new Color("#c62828"), new Color("#ff5f52")
-	};
-	private static final Color[] AMBER = {
-		new Color("#c79a00"), new Color("#ffca28"), new Color("#fffd61")
-	};	//400
 
-	private NotNowLayer prevLayer = new NotNowLayer(BLUE);
+	private NotNowLayer prevLayer = new NotNowLayer(Palette.BLUE);
 	private NowLayer nowLayer = new NowLayer();
-	private NotNowLayer nextLayer = new NotNowLayer(RED[1]);
+	private NotNowLayer nextLayer = new NotNowLayer(Palette.RED[1]);
 
 	private CheckFlow checkFlow;
 
@@ -120,7 +110,7 @@ public class CheckFlowPanel extends LayerContainer {
 		private ArrayList<CheckItemLayer> itemLayers = new ArrayList<>();
 
 		public NowLayer() {
-			setBgColor(AMBER[1]);
+			setBgColor(Palette.AMBER[1]);
 			setBgOpacity(0.9);
 
 			getText().setLX(12);
@@ -201,7 +191,7 @@ public class CheckFlowPanel extends LayerContainer {
 			}
 
 			private void refresh() {
-				setBgColor(data.isFinish() ? PURPLE[2] : PURPLE[0]);
+				setBgColor(data.isFinish() ? Palette.PURPLE[2] : Palette.PURPLE[0]);
 				text.setFill(data.isFinish() ? RGB.BLACK : RGB.WHITE);
 			}
 		}

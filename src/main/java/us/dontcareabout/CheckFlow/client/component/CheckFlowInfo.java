@@ -8,6 +8,7 @@ import com.sencha.gxt.chart.client.draw.RGB;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite.TextBaseline;
 
 import us.dontcareabout.CheckFlow.client.DateUtil;
+import us.dontcareabout.CheckFlow.client.Palette;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.gxt.client.draw.LRectangleSprite;
 import us.dontcareabout.gxt.client.draw.LTextSprite;
@@ -20,11 +21,6 @@ public class CheckFlowInfo extends LayerSprite {
 	private static final int NAME_SIZE = 40;
 	private static final int NUMBER_SIZE = 60;
 	private static final int FOOTER_SIZE = 18;
-	private static final Color BLACK = new Color("#1b1b1b");
-	private static final Color BLUE = new Color("#58a5f0");
-	private static final Color[] RED = {
-		new Color("#8e0000"), new Color("#c62828"), new Color("#ff5f52")
-	};
 
 	private LTextSprite name = new LTextSprite();
 	private LTextSprite nowCheckPoint = new LTextSprite();
@@ -95,10 +91,10 @@ public class CheckFlowInfo extends LayerSprite {
 			reciprocal.setBgColor(RGB.WHITE);
 		} else if (diff >= 0) {
 			int value = (int)((3.0 * diff / duration) % 3);
-			reciprocal.setBgColor(RED[value]);
+			reciprocal.setBgColor(Palette.RED[value]);
 			if (value < 2) { textColor = RGB.WHITE; }
 		} else {
-			reciprocal.setBgColor(BLACK);
+			reciprocal.setBgColor(Palette.BLACK);
 			textColor = RGB.WHITE;
 		}
 
@@ -117,7 +113,7 @@ public class CheckFlowInfo extends LayerSprite {
 			setLY(5);
 
 			progress.setWidth(getWidth());
-			progress.setFill(BLUE);
+			progress.setFill(Palette.BLUE);
 			add(progress);
 
 			text.setTextBaseline(TextBaseline.MIDDLE);
