@@ -11,4 +11,6 @@ import us.dontcareabout.CheckFlow.shared.CheckFlow;
 public interface RpcService extends RemoteService{
 	ArrayList<CheckFlow> getTemplates();
 	ArrayList<CheckFlow> getChecklists();
+
+	void saveCheckList(CheckFlow checkFlow);
 }

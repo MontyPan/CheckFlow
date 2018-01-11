@@ -3,6 +3,10 @@ package us.dontcareabout.CheckFlow.server;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
@@ -42,6 +46,11 @@ public class RpcServiceImpl extends RemoteServiceServlet implements RpcService {
 		return loadAll(DATA_DIR);
 	}
 
+	@Override
+	public void saveCheckList(CheckFlow checkFlow) {
+		save(checkFlow, new File(DATA_DIR, checkFlow.getName()));
+	}
+
 	private CheckFlow load(File file) {
 		try {
 			return gson.fromJson(new FileReader(file), CheckFlow.class);
@@ -62,5 +71,15 @@ public class RpcServiceImpl extends RemoteServiceServlet implements RpcService {
 		}
 
 		return result;
+	}
+
+	// 懶得抽出去了 XDDDD
+	private void save(CheckFlow cf, File file) {
+		try {
+			Files.write(file.toPath(), gson.toJson(cf).getBytes(StandardCharsets.UTF_8),
+					StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE_NEW);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
