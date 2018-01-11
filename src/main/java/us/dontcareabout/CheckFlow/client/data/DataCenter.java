@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import us.dontcareabout.CheckFlow.client.RpcService;
 import us.dontcareabout.CheckFlow.client.RpcServiceAsync;
 import us.dontcareabout.CheckFlow.client.data.CheckFlowReadyEvent.CheckFlowReadyHandler;
+import us.dontcareabout.CheckFlow.client.data.SaveCheckListEndEvent.SaveCheckListEndHandler;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 
 public class DataCenter {
@@ -53,5 +54,24 @@ public class DataCenter {
 
 	public static HandlerRegistration addCheckFlowReady(CheckFlowReadyHandler handler) {
 		return eventBus.addHandler(CheckFlowReadyEvent.TYPE, handler);
+	}
+
+	public static void saveCheckList(CheckFlow checkList) {
+		rpc.saveCheckList(checkList, new AsyncCallback<Void>() {
+			@Override
+			public void onSuccess(Void result) {
+				eventBus.fireEvent(new SaveCheckListEndEvent());
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+
+	public static HandlerRegistration addSaveCheckListEnd(SaveCheckListEndHandler handler) {
+		return eventBus.addHandler(SaveCheckListEndEvent.TYPE, handler);
 	}
 }
