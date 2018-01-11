@@ -30,6 +30,27 @@ public class DataCenter {
 		});
 	}
 
+	public static void wantTemplates() {
+		rpc.getTemplates(new AsyncCallback<ArrayList<CheckFlow>>() {
+			@Override
+			public void onSuccess(ArrayList<CheckFlow> result) {
+				eventBus.fireEvent(new TemplateReadyEvent(result));
+				templates = result;
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+
+	private static ArrayList<CheckFlow> templates;
+	public static ArrayList<CheckFlow> getTemplates() {
+		return templates;
+	}
+
 	public static HandlerRegistration addCheckFlowReady(CheckFlowReadyHandler handler) {
 		return eventBus.addHandler(CheckFlowReadyEvent.TYPE, handler);
 	}
