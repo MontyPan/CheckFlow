@@ -19,6 +19,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.form.validator.EmptyValidator;
 
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
+import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.CheckFlow.shared.CheckPoint;
 
@@ -73,6 +74,11 @@ public class NewProjectView extends Composite {
 		}
 
 		DataCenter.saveCheckList(data);
+	}
+
+	@UiHandler("cancel")
+	void clickCancel(SelectEvent se) {
+		UiCenter.checkFlowView();
 	}
 
 	private boolean validate() {
