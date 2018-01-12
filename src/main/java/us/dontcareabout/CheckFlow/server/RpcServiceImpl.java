@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -48,7 +49,9 @@ public class RpcServiceImpl extends RemoteServiceServlet implements RpcService {
 
 	@Override
 	public void saveCheckList(CheckFlow checkFlow) {
-		save(checkFlow, new File(DATA_DIR, checkFlow.getName()));
+		//因為懶得過濾使用者輸入的字串，所以用 UUID 省事 [茶]
+		//反正正常來說也沒人會去看實際檔名
+		save(checkFlow, new File(DATA_DIR, UUID.randomUUID().toString()));
 	}
 
 	private CheckFlow load(File file) {
