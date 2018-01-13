@@ -41,7 +41,13 @@ public class CheckListView extends VerticalLayoutContainer {
 	}
 
 	private void buildToolbar() {
-		ToolItem add = new ToolItem("新增專案");
+		ToolItem add = new ToolItem("新增檢查流程");
+		add.addSpriteSelectionHandler(new SpriteSelectionHandler() {
+			@Override
+			public void onSpriteSelect(SpriteSelectionEvent event) {
+				UiCenter.newCheckListView();
+			}
+		});
 		ToolItem checkTemplate = new ToolItem("流程範本管理");
 		toolbar.add(add);
 		toolbar.add(checkTemplate);
