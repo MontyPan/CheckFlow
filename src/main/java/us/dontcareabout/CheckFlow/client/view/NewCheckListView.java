@@ -25,9 +25,9 @@ import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.CheckFlow.shared.CheckPoint;
 import us.dontcareabout.gxt.client.component.GFComposite;
 
-public class NewProjectView extends GFComposite {
+public class NewCheckListView extends GFComposite {
 	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-	interface MyUiBinder extends UiBinder<Widget, NewProjectView> {}
+	interface MyUiBinder extends UiBinder<Widget, NewCheckListView> {}
 
 	private static final VerticalLayoutData CP_VLD = new VerticalLayoutData(1, 20);
 
@@ -40,13 +40,13 @@ public class NewProjectView extends GFComposite {
 		@Override
 		public void onSaveCheckListEnd(SaveCheckListEndEvent event) {
 			unmask();
-			UiCenter.checkFlowView();
+			UiCenter.checkListView();
 		}
 	};
 
 	private CheckFlow data;
 
-	public NewProjectView() {
+	public NewCheckListView() {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		name.addValidator(new EmptyValidator<String>());
@@ -89,7 +89,7 @@ public class NewProjectView extends GFComposite {
 
 	@UiHandler("cancel")
 	void clickCancel(SelectEvent se) {
-		UiCenter.checkFlowView();
+		UiCenter.checkListView();
 	}
 
 	private boolean validate() {

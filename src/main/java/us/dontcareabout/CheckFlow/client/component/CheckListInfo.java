@@ -14,7 +14,7 @@ import us.dontcareabout.gxt.client.draw.LRectangleSprite;
 import us.dontcareabout.gxt.client.draw.LTextSprite;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
-public class CheckFlowInfo extends LayerSprite {
+public class CheckListInfo extends LayerSprite {
 	public static final int HEIGHT = 140;
 
 	private static final NumberFormat NUMBER_FORMAT = NumberFormat.getFormat("###");
@@ -29,7 +29,7 @@ public class CheckFlowInfo extends LayerSprite {
 
 	private CheckFlow checkFlow;
 
-	public CheckFlowInfo() {
+	public CheckListInfo() {
 		name.setTextBaseline(TextBaseline.MIDDLE);
 		name.setFontSize(NAME_SIZE);
 		name.setLX(20);

@@ -4,35 +4,35 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 
-import us.dontcareabout.CheckFlow.client.component.CheckFlowPanel;
-import us.dontcareabout.CheckFlow.client.view.CheckFlowView;
+import us.dontcareabout.CheckFlow.client.component.CheckListPanel;
+import us.dontcareabout.CheckFlow.client.view.CheckListView;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 
 public class UiCenter {
 	private final static Viewport viewport = new Viewport();
-	private static CheckFlowView checkFlowView;
-	private static CheckFlowPanel checkFlowPanel;
+	private static CheckListView checkListView;
+	private static CheckListPanel checkListPanel;
 
 	public static void start() {
 		RootPanel.get().add(viewport);
-		checkFlowView();
+		checkListView();
 	}
 
-	public static void checkFlowView() {
-		if (checkFlowView == null) {
-			checkFlowView = new CheckFlowView();
+	public static void checkListView() {
+		if (checkListView == null) {
+			checkListView = new CheckListView();
 		}
 
-		switchTo(checkFlowView);
+		switchTo(checkListView);
 	}
 
-	public static void checkFlowMonitor(CheckFlow checkFlow) {
-		if (checkFlowPanel == null) {
-			checkFlowPanel = new CheckFlowPanel();
+	public static void checkListMonitor(CheckFlow checkFlow) {
+		if (checkListPanel == null) {
+			checkListPanel = new CheckListPanel();
 		}
 
-		checkFlowPanel.setData(checkFlow);
-		switchTo(checkFlowPanel);
+		checkListPanel.setData(checkFlow);
+		switchTo(checkListPanel);
 	}
 
 	private static void switchTo(Widget widget) {

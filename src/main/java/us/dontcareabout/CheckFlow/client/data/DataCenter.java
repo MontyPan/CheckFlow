@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import us.dontcareabout.CheckFlow.client.RpcService;
 import us.dontcareabout.CheckFlow.client.RpcServiceAsync;
-import us.dontcareabout.CheckFlow.client.data.CheckFlowReadyEvent.CheckFlowReadyHandler;
+import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent.CheckFlowListHandler;
 import us.dontcareabout.CheckFlow.client.data.SaveCheckListEndEvent.SaveCheckListEndHandler;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 
@@ -21,7 +21,7 @@ public class DataCenter {
 		rpc.getChecklists(new AsyncCallback<ArrayList<CheckFlow>>() {
 			@Override
 			public void onSuccess(ArrayList<CheckFlow> result) {
-				eventBus.fireEvent(new CheckFlowReadyEvent(result));
+				eventBus.fireEvent(new CheckListReadyEvent(result));
 			}
 
 			@Override
@@ -52,8 +52,8 @@ public class DataCenter {
 		return templates;
 	}
 
-	public static HandlerRegistration addCheckFlowReady(CheckFlowReadyHandler handler) {
-		return eventBus.addHandler(CheckFlowReadyEvent.TYPE, handler);
+	public static HandlerRegistration addCheckFlowReady(CheckFlowListHandler handler) {
+		return eventBus.addHandler(CheckListReadyEvent.TYPE, handler);
 	}
 
 	public static void saveCheckList(CheckFlow checkList) {

@@ -17,18 +17,16 @@ import us.dontcareabout.gxt.client.draw.LTextSprite;
 import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
-public class CheckFlowPanel extends LayerContainer {
+public class CheckListPanel extends LayerContainer {
 	private static final int ITEM_HEIGHT = 50;
-
-	//Refactory
 
 	private NotNowLayer prevLayer = new NotNowLayer(Palette.BLUE);
 	private NowLayer nowLayer = new NowLayer();
 	private NotNowLayer nextLayer = new NotNowLayer(Palette.RED[1]);
 
-	private CheckFlow checkFlow;
+	private CheckFlow checkList;
 
-	public CheckFlowPanel() {
+	public CheckListPanel() {
 		prevLayer.setLX(50);
 		prevLayer.setLY(0);
 
@@ -45,12 +43,12 @@ public class CheckFlowPanel extends LayerContainer {
 	}
 
 	public void setData(CheckFlow cf) {
-		checkFlow = cf;
+		checkList = cf;
 
-		int index = checkFlow.getUnfinishPointIndex();
-		prevLayer.setData(checkFlow.getPointList().get(index - 1));
-		nowLayer.setData(checkFlow.getPointList().get(index));
-		nextLayer.setData(checkFlow.getPointList().get(index + 1));
+		int index = checkList.getUnfinishPointIndex();
+		prevLayer.setData(checkList.getPointList().get(index - 1));
+		nowLayer.setData(checkList.getPointList().get(index));
+		nextLayer.setData(checkList.getPointList().get(index + 1));
 
 		redrawSurfaceForced();	//zIndex 靈異現象的萬惡解
 	}
@@ -140,7 +138,7 @@ public class CheckFlowPanel extends LayerContainer {
 				add(cil);
 				itemLayers.add(cil);
 				//還沒有真正掛到 DrawComponent 上去，所以補作
-				cil.deploy(CheckFlowPanel.this);
+				cil.deploy(CheckListPanel.this);
 			}
 
 			adjustMember();

@@ -3,35 +3,38 @@ package us.dontcareabout.CheckFlow.client.view;
 import java.util.ArrayList;
 
 import com.sencha.gxt.chart.client.draw.RGB;
+import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent;
+import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelectionHandler;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
-import us.dontcareabout.CheckFlow.client.component.CheckFlowInfo;
+import us.dontcareabout.CheckFlow.client.component.CheckListInfo;
 import us.dontcareabout.CheckFlow.client.component.TextButton;
 import us.dontcareabout.CheckFlow.client.component.Toolbar;
-import us.dontcareabout.CheckFlow.client.data.CheckFlowReadyEvent;
-import us.dontcareabout.CheckFlow.client.data.CheckFlowReadyEvent.CheckFlowReadyHandler;
+import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent;
+import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent.CheckFlowListHandler;
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
+import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.gxt.client.draw.Layer;
 import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
-public class CheckFlowView extends VerticalLayoutContainer {
+public class CheckListView extends VerticalLayoutContainer {
 	private CheckFlowList list = new CheckFlowList();
 	private Toolbar toolbar = new Toolbar();
 	private VerticalLayoutContainer main = new VerticalLayoutContainer();
 
-	public CheckFlowView() {
+	public CheckListView() {
 		main.add(list, new VerticalLayoutData(1, -1));
 		main.setScrollMode(ScrollMode.AUTOY);
 		add(main, new VerticalLayoutData(1, 1));
 		add(toolbar, new VerticalLayoutData(1, 80));
 		buildToolbar();
 
-		DataCenter.addCheckFlowReady(new CheckFlowReadyHandler() {
+		DataCenter.addCheckFlowReady(new CheckFlowListHandler() {
 			@Override
-			public void onCheckFlowReady(CheckFlowReadyEvent event) {
+			public void onCheckFlowReady(CheckListReadyEvent event) {
 				checkFlowReady(event.data);
 			}
 		});
@@ -62,20 +65,20 @@ public class CheckFlowView extends VerticalLayoutContainer {
 			int index = 0;
 
 			for (final CheckFlow cf : checkFlows) {
-				CheckFlowInfo item = new CheckFlowInfo();
-				item.setLY(index * (CheckFlowInfo.HEIGHT + 5));
+				CheckListInfo item = new CheckListInfo();
+				item.setLY(index * (CheckListInfo.HEIGHT + 5));
 				item.setData(cf);
 				addLayer(item);
 				index++;
 			}
 
-			setHeight(checkFlows.size() * (CheckFlowInfo.HEIGHT + 5));
+			setHeight(checkFlows.size() * (CheckListInfo.HEIGHT + 5));
 		}
 
 		@Override
 		protected void onResize(int width, int height) {
 			for (Layer layer : getLayers()) {
-				((LayerSprite) layer).onResize(width, CheckFlowInfo.HEIGHT);
+				((LayerSprite) layer).onResize(width, CheckListInfo.HEIGHT);
 			}
 
 			super.onResize(width, height);
