@@ -9,7 +9,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -19,11 +18,14 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.form.validator.EmptyValidator;
 
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
+import us.dontcareabout.CheckFlow.client.data.SaveCheckListEndEvent;
+import us.dontcareabout.CheckFlow.client.data.SaveCheckListEndEvent.SaveCheckListEndHandler;
 import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.CheckFlow.shared.CheckPoint;
+import us.dontcareabout.gxt.client.component.GFComposite;
 
-public class NewProjectView extends Composite {
+public class NewProjectView extends GFComposite {
 	private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 	interface MyUiBinder extends UiBinder<Widget, NewProjectView> {}
 
@@ -33,8 +35,16 @@ public class NewProjectView extends Composite {
 	@UiField DateField deadline;
 	@UiField VerticalLayoutContainer cpList;
 
+	private final ArrayList<DateField> deadlineList = new ArrayList<>();
+	private final SaveCheckListEndHandler saveHandler = new SaveCheckListEndHandler() {
+		@Override
+		public void onSaveCheckListEnd(SaveCheckListEndEvent event) {
+			unmask();
+			UiCenter.checkFlowView();
+		}
+	};
+
 	private CheckFlow data;
-	private ArrayList<DateField> deadlineList = new ArrayList<>();
 
 	public NewProjectView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -73,6 +83,7 @@ public class NewProjectView extends Composite {
 			checkPoints.get(i).setDeadline(deadlineList.get(i).getValue());
 		}
 
+		mask("資料儲存中...");
 		DataCenter.saveCheckList(data);
 	}
 
@@ -110,5 +121,10 @@ public class NewProjectView extends Composite {
 		}
 
 		return true;
+	}
+
+	@Override
+	protected void enrollWhenVisible() {
+		enrollHR(DataCenter.addSaveCheckListEnd(saveHandler));
 	}
 }
