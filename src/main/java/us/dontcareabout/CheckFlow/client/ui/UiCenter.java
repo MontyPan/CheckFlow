@@ -7,6 +7,7 @@ import com.sencha.gxt.widget.core.client.container.Viewport;
 import us.dontcareabout.CheckFlow.client.component.CheckListPanel;
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
 import us.dontcareabout.CheckFlow.client.view.CheckListView;
+import us.dontcareabout.CheckFlow.client.view.MaintainTemplateView;
 import us.dontcareabout.CheckFlow.client.view.NewCheckListView;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 
@@ -15,6 +16,7 @@ public class UiCenter {
 	private static CheckListView checkListView;
 	private static CheckListPanel checkListPanel;
 	private static NewCheckListView newCheckFlowView;
+	private static MaintainTemplateView maintainTemplate;
 
 	public static void start() {
 		RootPanel.get().add(viewport);
@@ -45,6 +47,15 @@ public class UiCenter {
 
 		newCheckFlowView.setData(DataCenter.getTemplates().get(0));	//FIXME
 		switchTo(newCheckFlowView);
+	}
+
+	public static void maintainTemplate() {
+		if (maintainTemplate == null) {
+			maintainTemplate = new MaintainTemplateView();
+		}
+
+		maintainTemplate.setData(DataCenter.getTemplates().get(0));	//FIXME
+		switchTo(maintainTemplate);
 	}
 
 	private static void switchTo(Widget widget) {

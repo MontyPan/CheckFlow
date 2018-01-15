@@ -48,6 +48,12 @@ public class CheckListView extends VerticalLayoutContainer {
 			}
 		});
 		ToolItem checkTemplate = new ToolItem("流程範本管理");
+		checkTemplate.addSpriteSelectionHandler(new SpriteSelectionHandler() {
+			@Override
+			public void onSpriteSelect(SpriteSelectionEvent event) {
+				UiCenter.maintainTemplate();
+			}
+		});
 		toolbar.add(add);
 		toolbar.add(checkTemplate);
 	}
