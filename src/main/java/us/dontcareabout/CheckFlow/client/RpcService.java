@@ -13,4 +13,5 @@ public interface RpcService extends RemoteService{
 	ArrayList<CheckFlow> getChecklists();
 
 	void saveCheckList(CheckFlow checkFlow);
+	void saveTemplate(CheckFlow template);
 }
