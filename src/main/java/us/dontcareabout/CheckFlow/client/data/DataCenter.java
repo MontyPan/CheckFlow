@@ -11,6 +11,7 @@ import us.dontcareabout.CheckFlow.client.RpcService;
 import us.dontcareabout.CheckFlow.client.RpcServiceAsync;
 import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent.CheckFlowListHandler;
 import us.dontcareabout.CheckFlow.client.data.SaveCheckListEndEvent.SaveCheckListEndHandler;
+import us.dontcareabout.CheckFlow.client.data.SaveTemplateEndEvent.SaveTemplateEndHandler;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 
 public class DataCenter {
@@ -73,5 +74,24 @@ public class DataCenter {
 
 	public static HandlerRegistration addSaveCheckListEnd(SaveCheckListEndHandler handler) {
 		return eventBus.addHandler(SaveCheckListEndEvent.TYPE, handler);
+	}
+
+	public static void saveTemplate(CheckFlow template) {
+		rpc.saveTemplate(template, new AsyncCallback<Void>() {
+			@Override
+			public void onSuccess(Void result) {
+				eventBus.fireEvent(new SaveTemplateEndEvent());
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+
+	public static HandlerRegistration addSaveTemplateEnd(SaveTemplateEndHandler handler) {
+		return eventBus.addHandler(SaveTemplateEndEvent.TYPE, handler);
 	}
 }
