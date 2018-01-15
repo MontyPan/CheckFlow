@@ -2,14 +2,13 @@ package us.dontcareabout.CheckFlow.client.view;
 
 import java.util.ArrayList;
 
-import com.sencha.gxt.chart.client.draw.RGB;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelectionHandler;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
 import us.dontcareabout.CheckFlow.client.component.CheckListInfo;
-import us.dontcareabout.CheckFlow.client.component.TextButton;
+import us.dontcareabout.CheckFlow.client.component.ToolItem;
 import us.dontcareabout.CheckFlow.client.component.Toolbar;
 import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent;
 import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent.CheckFlowListHandler;
@@ -88,15 +87,6 @@ public class CheckListView extends VerticalLayoutContainer {
 			}
 
 			super.onResize(width, height);
-		}
-	}
-
-	class ToolItem extends TextButton {
-		public ToolItem(String str) {
-			super(str);
-			setBgColor(RGB.LIGHTGRAY);
-			setBgRadius(20);
-			setMargin(20);
 		}
 	}
 }
