@@ -81,6 +81,7 @@ public class DataCenter {
 			@Override
 			public void onSuccess(Void result) {
 				eventBus.fireEvent(new SaveTemplateEndEvent());
+				wantTemplates();
 			}
 
 			@Override
