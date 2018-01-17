@@ -53,7 +53,13 @@ public class NewCheckListView extends GFComposite {
 	}
 
 	public void setData(CheckFlow template) {
+		//用同一個 reference 也沒關係，反正只有要讀取 template 的 CheckPoint.name 而已 XD
 		this.data = template;
+
+		//因為是用同一個 NewCheckListView 的 instance，所以要清空前一次輸入的東西
+		name.clear();
+		deadline.clear();
+		//CheckPoint 的 deadline 們都是每次重新 new...
 		cpList.clear();
 		deadlineList.clear();
 
