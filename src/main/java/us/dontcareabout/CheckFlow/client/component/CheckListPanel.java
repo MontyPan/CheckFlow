@@ -21,11 +21,7 @@ public class CheckListPanel extends LayerContainer {
 	private static final int H_UNIT = 60;
 	private static final int MARGIN = 5;
 
-	private CheckFlow checkList;
-
 	public void setData(CheckFlow cf) {
-		checkList = cf;
-
 		this.clear();
 		int height = 0;
 
@@ -39,7 +35,7 @@ public class CheckListPanel extends LayerContainer {
 				this.addLayer(layer);
 				height += H_UNIT + MARGIN;
 			} else {
-				int nowHeight = 95 + cp.getItemList().size() / 2 * (ITEM_HEIGHT + MARGIN);
+				int nowHeight = 95 + (int)(Math.ceil(cp.getItemList().size() / 2.0)) * (ITEM_HEIGHT + MARGIN);
 				NowLayer layer = new NowLayer();
 				layer.setData(cp);
 				layer.setLY(height + MARGIN);
