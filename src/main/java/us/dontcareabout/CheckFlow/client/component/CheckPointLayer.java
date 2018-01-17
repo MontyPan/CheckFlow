@@ -24,9 +24,13 @@ public class CheckPointLayer extends LayerSprite {
 		if (checkPoint.isFinish()) {
 			reciprocal.setText("");
 		} else {
-			int diff = DateUtil.daysBetween(checkPoint.getDeadline(), new Date());
-			String reciprocalHeader = diff < 0 ? "逾 " : "剩 ";
-			getReciprocal().setText(reciprocalHeader + Math.abs(diff) + " 天");
+			if (checkPoint.getDeadline() == null) {
+				getReciprocal().setText("？");
+			} else {
+				int diff = DateUtil.daysBetween(checkPoint.getDeadline(), new Date());
+				String reciprocalHeader = diff < 0 ? "逾 " : "剩 ";
+				getReciprocal().setText(reciprocalHeader + Math.abs(diff) + " 天");
+			}
 		}
 
 		adjustMember();
