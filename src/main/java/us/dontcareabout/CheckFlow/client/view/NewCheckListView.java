@@ -2,8 +2,12 @@ package us.dontcareabout.CheckFlow.client.view;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.EditorError;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -15,6 +19,8 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.DateField;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.form.Validator;
+import com.sencha.gxt.widget.core.client.form.error.DefaultEditorError;
 import com.sencha.gxt.widget.core.client.form.validator.EmptyValidator;
 
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
@@ -43,6 +49,19 @@ public class NewCheckListView extends GFComposite {
 			UiCenter.checkListView();
 		}
 	};
+	private final Validator<String> fileNameValidator = new Validator<String>() {
+		@Override
+		public List<EditorError> validate(Editor<String> editor, String value) {
+			RegExp regExp = RegExp.compile("[\\\\/:\"*?<>|]+");
+
+			if (regExp.test(value)) {
+				List<EditorError> errors = new ArrayList<EditorError>();
+				errors.add(new DefaultEditorError(editor, "包含非法字元「\\ / : \" * ? < > |」", ""));
+				return errors;
+			}
+			return null;
+		}
+	};
 
 	private CheckFlow data;
 
@@ -50,6 +69,7 @@ public class NewCheckListView extends GFComposite {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		name.addValidator(new EmptyValidator<String>());
+		name.addValidator(fileNameValidator);
 	}
 
 	public void setData(CheckFlow template) {

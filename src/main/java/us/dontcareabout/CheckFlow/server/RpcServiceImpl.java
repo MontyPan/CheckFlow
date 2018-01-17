@@ -47,9 +47,7 @@ public class RpcServiceImpl extends RemoteServiceServlet implements RpcService {
 
 	@Override
 	public void saveCheckList(CheckFlow checkFlow) {
-		//因為懶得過濾使用者輸入的字串，所以用 UUID 省事 [茶]
-		//反正正常來說也沒人會去看實際檔名
-		save(checkFlow, new File(DATA_DIR, UUID.randomUUID().toString()));
+		save(checkFlow, new File(DATA_DIR, checkFlow.getName()));
 	}
 
 	@Override
