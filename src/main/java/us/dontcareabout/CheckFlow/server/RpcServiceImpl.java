@@ -46,8 +46,13 @@ public class RpcServiceImpl extends RemoteServiceServlet implements RpcService {
 	}
 
 	@Override
-	public void saveCheckList(CheckFlow checkFlow) {
-		save(checkFlow, new File(DATA_DIR, checkFlow.getName()));
+	public void saveCheckList(CheckFlow checkList) {
+		save(checkList, new File(DATA_DIR, checkList.getName()));
+	}
+
+	@Override
+	public void delCheckList(CheckFlow checkList) {
+		new File(DATA_DIR, checkList.getName()).delete();
 	}
 
 	@Override
