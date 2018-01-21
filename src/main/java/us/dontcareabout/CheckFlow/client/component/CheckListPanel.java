@@ -1,6 +1,7 @@
 package us.dontcareabout.CheckFlow.client.component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.sencha.gxt.chart.client.draw.Color;
 import com.sencha.gxt.chart.client.draw.RGB;
@@ -21,32 +22,46 @@ public class CheckListPanel extends LayerContainer {
 	private static final int H_UNIT = 60;
 	private static final int MARGIN = 5;
 
+	private CheckFlow checkList;
+
 	public void setData(CheckFlow cf) {
+		this.checkList = cf;
+		refresh();
+	}
+
+	private void refresh() {
 		this.clear();
 		int height = 0;
 
-		for (CheckPoint cp : cf.getPointList()) {
-			if (cp != cf.getUnfinishPoint()) {
-				NotNowLayer layer = new NotNowLayer(cp.isFinish() ? Palette.BLUE : Palette.RED[1]);
-				layer.setData(cp);
-				layer.setLX(MARGIN);
-				layer.setLY(height + MARGIN);
-				layer.setHeight(H_UNIT);
-				this.addLayer(layer);
-				height += H_UNIT + MARGIN;
+		List<CheckPoint> cpList = checkList.getPointList();
+		CheckPoint cp;
+		CheckPointLayer cpLayer;
+
+		for (int i = 0; i < cpList.size(); i++) {
+			cp = cpList.get(i);
+
+			if (i < checkList.getUnfinishPointIndex()) {
+				cpLayer = new NotNowLayer(Palette.BLUE);
+				cpLayer.setHeight(H_UNIT);
 			} else {
-				int nowHeight = 95 + (int)(Math.ceil(cp.getItemList().size() / 2.0)) * (ITEM_HEIGHT + MARGIN);
-				NowLayer layer = new NowLayer();
-				layer.setData(cp);
-				layer.setLY(height + MARGIN);
-				layer.setLX(MARGIN);
-				layer.setHeight(nowHeight);
-				this.addLayer(layer);
-				height += nowHeight + MARGIN;
+				cpLayer = new NowLayer();
+				cpLayer.setHeight(
+					95 + (int)(Math.ceil(cp.getItemList().size() / 2.0)) * (ITEM_HEIGHT + MARGIN)
+				);
 			}
+
+			cpLayer.setLX(MARGIN);
+			cpLayer.setLY(height + MARGIN);
+			cpLayer.setData(cpList.get(i));
+			this.addLayer(cpLayer);
+			height += cpLayer.getHeight() + MARGIN;
 		}
 
+		//防止 Component.onAttach() 時沒有大小而被（莫名？）給了 500px 的問題
+		//重點是上述問題還不是每次都會發生...... ＝＝"
 		setHeight(height);
+		//確保一定會觸發各 member 的 onResize()
+		onResize(getOffsetWidth(), height);
 	}
 
 	@Override
