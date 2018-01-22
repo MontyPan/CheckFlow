@@ -4,8 +4,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 
-import us.dontcareabout.CheckFlow.client.component.CheckListPanel;
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
+import us.dontcareabout.CheckFlow.client.view.CheckListMonitor;
 import us.dontcareabout.CheckFlow.client.view.CheckListView;
 import us.dontcareabout.CheckFlow.client.view.MaintainTemplateView;
 import us.dontcareabout.CheckFlow.client.view.NewCheckListView;
@@ -14,7 +14,7 @@ import us.dontcareabout.CheckFlow.shared.CheckFlow;
 public class UiCenter {
 	private final static Viewport viewport = new Viewport();
 	private static CheckListView checkListView;
-	private static CheckListPanel checkListPanel;
+	private static CheckListMonitor checkListMonitor;
 	private static NewCheckListView newCheckFlowView;
 	private static MaintainTemplateView maintainTemplate;
 
@@ -32,12 +32,12 @@ public class UiCenter {
 	}
 
 	public static void checkListMonitor(CheckFlow checkFlow) {
-		if (checkListPanel == null) {
-			checkListPanel = new CheckListPanel();
+		if (checkListMonitor == null) {
+			checkListMonitor = new CheckListMonitor();
 		}
 
-		checkListPanel.setData(checkFlow);
-		switchTo(checkListPanel);
+		checkListMonitor.setData(checkFlow);
+		switchTo(checkListMonitor);
 	}
 
 	public static void newCheckListView() {

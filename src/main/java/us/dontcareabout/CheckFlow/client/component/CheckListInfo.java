@@ -5,10 +5,13 @@ import java.util.Date;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.sencha.gxt.chart.client.draw.Color;
 import com.sencha.gxt.chart.client.draw.RGB;
+import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent;
+import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelectionHandler;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite.TextBaseline;
 
 import us.dontcareabout.CheckFlow.client.DateUtil;
 import us.dontcareabout.CheckFlow.client.Palette;
+import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.gxt.client.draw.LRectangleSprite;
 import us.dontcareabout.gxt.client.draw.LTextSprite;
@@ -44,6 +47,13 @@ public class CheckListInfo extends LayerSprite {
 
 		add(progress);
 		add(reciprocal);
+
+		addSpriteSelectionHandler(new SpriteSelectionHandler() {
+			@Override
+			public void onSpriteSelect(SpriteSelectionEvent event) {
+				UiCenter.checkListMonitor(checkFlow);
+			}
+		});
 	}
 
 	public void setData(CheckFlow cf) {
