@@ -3,7 +3,6 @@ package us.dontcareabout.CheckFlow.client.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sencha.gxt.chart.client.draw.Color;
 import com.sencha.gxt.chart.client.draw.RGB;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelectionHandler;
@@ -40,11 +39,11 @@ public class CheckListPanel extends LayerContainer {
 		for (int i = 0; i < cpList.size(); i++) {
 			cp = cpList.get(i);
 
-			if (i < checkList.getUnfinishPointIndex()) {
-				cpLayer = new NotNowLayer(Palette.BLUE);
+			if (cp.isFinish()) {
+				cpLayer = new FinishLayer();
 				cpLayer.setHeight(H_UNIT);
 			} else {
-				cpLayer = new NowLayer();
+				cpLayer = new UnfinishLayer();
 				cpLayer.setHeight(
 					95 + (int)(Math.ceil(cp.getItemList().size() / 2.0) + 1)
 					* (ITEM_HEIGHT + MARGIN)
@@ -75,11 +74,11 @@ public class CheckListPanel extends LayerContainer {
 		super.onResize(width, height);
 	}
 
-	class NowLayer extends CheckPointLayer {
+	class UnfinishLayer extends CheckPointLayer {
 		private ArrayList<CheckItemLayer> itemLayers = new ArrayList<>();
 		private TextButton finish = new TextButton("完成");
 
-		public NowLayer() {
+		public UnfinishLayer() {
 			setBgColor(Palette.AMBER[1]);
 			setBgOpacity(0.9);
 
@@ -208,9 +207,9 @@ public class CheckListPanel extends LayerContainer {
 		}
 	}
 
-	class NotNowLayer extends CheckPointLayer {
-		public NotNowLayer(Color bgColor) {
-			setBgColor(bgColor);
+	class FinishLayer extends CheckPointLayer {
+		public FinishLayer() {
+			setBgColor(Palette.BLUE);
 
 			getText().setLX(10);
 			getText().setLY(10);
