@@ -46,7 +46,8 @@ public class CheckListPanel extends LayerContainer {
 			} else {
 				cpLayer = new NowLayer();
 				cpLayer.setHeight(
-					95 + (int)(Math.ceil(cp.getItemList().size() / 2.0)) * (ITEM_HEIGHT + MARGIN)
+					95 + (int)(Math.ceil(cp.getItemList().size() / 2.0) + 1)
+					* (ITEM_HEIGHT + MARGIN)
 				);
 			}
 
@@ -76,6 +77,7 @@ public class CheckListPanel extends LayerContainer {
 
 	class NowLayer extends CheckPointLayer {
 		private ArrayList<CheckItemLayer> itemLayers = new ArrayList<>();
+		private TextButton finish = new TextButton("完成");
 
 		public NowLayer() {
 			setBgColor(Palette.AMBER[1]);
@@ -89,11 +91,29 @@ public class CheckListPanel extends LayerContainer {
 			getReciprocal().setLY(15);
 			getReciprocal().setFontSize(40);
 			getReciprocal().setCursor(Cursor.POINTER);
+
+			finish.setTextColor(RGB.WHITE);
+			finish.setBgRadius(10);
+			finish.setMargin(5);
+			finish.addSpriteSelectionHandler(new SpriteSelectionHandler() {
+				@Override
+				public void onSpriteSelect(SpriteSelectionEvent event) {
+					if (finish.getBgColor() != Palette.RED[1]) { return; }
+
+					getData().setFinish(true);
+					refresh();
+				}
+			});
+			add(finish);
 		}
 
 		@Override
 		public void setData(CheckPoint checkPoint) {
 			super.setData(checkPoint);
+
+			finish.setBgColor(
+				checkPoint.getItemList().size() == 0 ? Palette.RED[1] : Palette.PURPLE[1]
+			);
 
 			//清空 CheckItemLayer 們
 			for (CheckItemLayer layer : itemLayers) {
@@ -126,6 +146,27 @@ public class CheckListPanel extends LayerContainer {
 				cil.setLX(i % 2 == 0 ? 15 : w + 25);
 				cil.setLY(i / 2 * (ITEM_HEIGHT + MARGIN) + 90);
 			}
+
+			finish.onResize(w, ITEM_HEIGHT);
+			finish.setLX(
+				(getWidth() - w) / 2
+			);
+			finish.setLY(
+				(int)(Math.ceil(itemLayers.size() / 2.0)) * (ITEM_HEIGHT + MARGIN) + 90
+			);
+		}
+
+		private void itemChange() {
+			boolean flag = true;
+
+			for (CheckPoint cp : getData().getItemList()) {
+				if (!cp.isFinish()) {
+					flag = false;
+					break;
+				}
+			}
+
+			finish.setBgColor(flag ? Palette.RED[1] : Palette.PURPLE[1]);
 		}
 
 		class CheckItemLayer extends LayerSprite {
@@ -143,6 +184,7 @@ public class CheckListPanel extends LayerContainer {
 					public void onSpriteSelect(SpriteSelectionEvent event) {
 						data.setFinish(!data.isFinish());
 						refresh();
+						itemChange();
 					}
 				});
 
