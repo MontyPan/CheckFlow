@@ -2,6 +2,7 @@ package us.dontcareabout.CheckFlow.client;
 
 import com.google.gwt.user.client.Window;
 
+import us.dontcareabout.CheckFlow.client.data.DataCenter;
 import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.gwt.client.GFEP;
 import us.dontcareabout.gwt.client.iCanUse.Feature;
@@ -25,6 +26,7 @@ public class CFEP extends GFEP {
 
 	@Override
 	protected void start() {
+		DataCenter.wantTemplates();
 		UiCenter.start();
 	}
 }
