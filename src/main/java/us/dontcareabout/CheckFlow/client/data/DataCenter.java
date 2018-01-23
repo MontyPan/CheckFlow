@@ -136,6 +136,7 @@ public class DataCenter {
 		};
 
 		CheckFlow result = new CheckFlow();
+		result.setVersionId("Default Template");
 
 		for (int i = 0; i < CP.length; i++) {
 			CheckPoint cp = new CheckPoint();
