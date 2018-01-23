@@ -3,14 +3,17 @@ package us.dontcareabout.CheckFlow.client.component;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.sencha.gxt.chart.client.draw.RGB;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent;
 import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelectionHandler;
 
 import us.dontcareabout.CheckFlow.client.Palette;
+import us.dontcareabout.CheckFlow.client.Resources;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.CheckFlow.shared.CheckPoint;
 import us.dontcareabout.gxt.client.draw.Cursor;
+import us.dontcareabout.gxt.client.draw.LImageSprite;
 import us.dontcareabout.gxt.client.draw.LTextSprite;
 import us.dontcareabout.gxt.client.draw.Layer;
 import us.dontcareabout.gxt.client.draw.LayerContainer;
@@ -20,6 +23,7 @@ public class CheckListPanel extends LayerContainer {
 	private static final int ITEM_HEIGHT = 50;
 	private static final int H_UNIT = 60;
 	private static final int MARGIN = 5;
+	private static final ImageResource arrow = Resources.instance.arrowDown();
 
 	private CheckFlow checkList;
 
@@ -55,6 +59,13 @@ public class CheckListPanel extends LayerContainer {
 			cpLayer.setData(cpList.get(i));
 			this.addLayer(cpLayer);
 			height += cpLayer.getHeight() + MARGIN;
+
+			if (i < cpList.size() - 1) {
+				ArrowLayer arrowLayer = new ArrowLayer();
+				arrowLayer.setLY(height + MARGIN);
+				this.addLayer(arrowLayer);
+				height += arrow.getHeight() + MARGIN;
+			}
 		}
 
 		//防止 Component.onAttach() 時沒有大小而被（莫名？）給了 500px 的問題
@@ -67,8 +78,15 @@ public class CheckListPanel extends LayerContainer {
 	@Override
 	protected void onResize(int width, int height) {
 		for (Layer layer : getLayers()) {
-			LayerSprite ls = (LayerSprite)layer;
-			ls.onResize(width - MARGIN * 2, ls.getHeight());
+			if (layer instanceof CheckPointLayer) {
+				LayerSprite ls = (LayerSprite)layer;
+				ls.onResize(width - MARGIN * 2, ls.getHeight());
+			}
+
+			if (layer instanceof ArrowLayer) {
+				LayerSprite ls = (LayerSprite)layer;
+				ls.setLX((width - arrow.getWidth()) / 2);
+			}
 		}
 
 		super.onResize(width, height);
@@ -219,6 +237,20 @@ public class CheckListPanel extends LayerContainer {
 			getReciprocal().setLY(15);
 			getReciprocal().setFontSize(20);
 			getReciprocal().setFill(RGB.WHITE);
+		}
+	}
+
+	//用 LayerSprite 比較方便... XD
+	class ArrowLayer extends LayerSprite {
+		public ArrowLayer() {
+			super(arrow.getWidth(), arrow.getHeight());
+			add(new Arrow());
+		}
+
+		class Arrow extends LImageSprite {
+			public Arrow() {
+				setResource(arrow);
+			}
 		}
 	}
 }
