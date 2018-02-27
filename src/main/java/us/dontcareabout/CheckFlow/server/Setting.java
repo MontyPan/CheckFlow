@@ -2,7 +2,7 @@ package us.dontcareabout.CheckFlow.server;
 
 import java.io.File;
 
-import us.dontcareabout.java.DoubleProperties;
+import us.dontcareabout.java.common.DoubleProperties;
 
 public class Setting extends DoubleProperties {
 	private static File workspace;
