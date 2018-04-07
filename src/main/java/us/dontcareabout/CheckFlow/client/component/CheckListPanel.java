@@ -243,7 +243,6 @@ public class CheckListPanel extends LayerContainer {
 	//用 LayerSprite 比較方便... XD
 	class ArrowLayer extends LayerSprite {
 		public ArrowLayer() {
-			super(arrow.getWidth(), arrow.getHeight());
 			add(new Arrow());
 		}
 
