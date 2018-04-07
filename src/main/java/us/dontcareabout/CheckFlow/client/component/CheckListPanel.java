@@ -18,6 +18,7 @@ import us.dontcareabout.gxt.client.draw.LTextSprite;
 import us.dontcareabout.gxt.client.draw.Layer;
 import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
+import us.dontcareabout.gxt.client.draw.component.TextButton;
 
 public class CheckListPanel extends LayerContainer {
 	private static final int ITEM_HEIGHT = 50;
