@@ -15,7 +15,6 @@ import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent.CheckFlowListH
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
 import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
-import us.dontcareabout.gxt.client.draw.Layer;
 import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
@@ -88,8 +87,8 @@ public class CheckListView extends VerticalLayoutContainer {
 
 		@Override
 		protected void onResize(int width, int height) {
-			for (Layer layer : getLayers()) {
-				((LayerSprite) layer).onResize(width, CheckListInfo.HEIGHT);
+			for (LayerSprite layer : getLayers()) {
+				layer.resize(width, CheckListInfo.HEIGHT);
 			}
 
 			super.onResize(width, height);

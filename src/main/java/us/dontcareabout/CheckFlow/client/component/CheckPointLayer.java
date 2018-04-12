@@ -2,6 +2,8 @@ package us.dontcareabout.CheckFlow.client.component;
 
 import java.util.Date;
 
+import com.google.common.base.Strings;
+
 import us.dontcareabout.CheckFlow.client.DateUtil;
 import us.dontcareabout.CheckFlow.shared.CheckPoint;
 import us.dontcareabout.gxt.client.draw.LTextSprite;
@@ -38,6 +40,9 @@ public class CheckPointLayer extends LayerSprite {
 
 	@Override
 	protected void adjustMember() {
+		//沒有字就不用調了
+		if (Strings.isNullOrEmpty(getReciprocal().getText())) { return; }
+		
 		getReciprocal().setLX(
 			getWidth() -
 			(getReciprocal().getText().length() + 2) *	//有兩個中文字補兩個 unit

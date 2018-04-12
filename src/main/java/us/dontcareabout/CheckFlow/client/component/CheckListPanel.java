@@ -46,10 +46,11 @@ public class CheckListPanel extends LayerContainer {
 
 			if (cp.isFinish()) {
 				cpLayer = new FinishLayer();
-				cpLayer.setHeight(H_UNIT);
+				cpLayer.resize(0, H_UNIT);
 			} else {
 				cpLayer = new UnfinishLayer();
-				cpLayer.setHeight(
+				cpLayer.resize(
+					0,
 					95 + (int)(Math.ceil(cp.getItemList().size() / 2.0) + 1)
 					* (ITEM_HEIGHT + MARGIN)
 				);
@@ -81,7 +82,7 @@ public class CheckListPanel extends LayerContainer {
 		for (Layer layer : getLayers()) {
 			if (layer instanceof CheckPointLayer) {
 				LayerSprite ls = (LayerSprite)layer;
-				ls.onResize(width - MARGIN * 2, ls.getHeight());
+				ls.resize(width - MARGIN * 2, ls.getHeight());
 			}
 
 			if (layer instanceof ArrowLayer) {
@@ -160,12 +161,12 @@ public class CheckListPanel extends LayerContainer {
 
 			for (int i = 0; i < itemLayers.size(); i++) {
 				CheckItemLayer cil = itemLayers.get(i);
-				cil.onResize(w, ITEM_HEIGHT);
+				cil.resize(w, ITEM_HEIGHT);
 				cil.setLX(i % 2 == 0 ? 15 : w + 25);
 				cil.setLY(i / 2 * (ITEM_HEIGHT + MARGIN) + 90);
 			}
 
-			finish.onResize(w, ITEM_HEIGHT);
+			finish.resize(w, ITEM_HEIGHT);
 			finish.setLX(
 				(getWidth() - w) / 2
 			);

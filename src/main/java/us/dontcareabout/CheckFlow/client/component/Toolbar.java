@@ -16,7 +16,7 @@ public class Toolbar extends LayerContainer {
 		int index = 0;
 
 		for (LayerSprite btn : items) {
-			btn.onResize(wUnit, height);
+			btn.resize(wUnit, height);
 			btn.setLX(margin + index * (wUnit + margin * 2));
 			index++;
 		}

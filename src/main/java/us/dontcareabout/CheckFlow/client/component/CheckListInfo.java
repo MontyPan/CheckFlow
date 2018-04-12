@@ -118,8 +118,7 @@ public class CheckListInfo extends LayerSprite {
 		LRectangleSprite progress = new LRectangleSprite();
 
 		Block(String footerString) {
-			setWidth(NUMBER_SIZE * 1.5 + 30);
-			setHeight(HEIGHT - 10);
+			resize(NUMBER_SIZE * 1.5 + 30, HEIGHT - 10);
 			setLY(5);
 
 			progress.setWidth(getWidth());
