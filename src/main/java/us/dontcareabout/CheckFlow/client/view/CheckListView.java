@@ -19,6 +19,8 @@ import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
 public class CheckListView extends VerticalLayoutContainer {
+	public static final int ITEM_HEIGNT = 140;
+
 	private CheckFlowList list = new CheckFlowList();
 	private Toolbar toolbar = new Toolbar();
 	private VerticalLayoutContainer main = new VerticalLayoutContainer();
@@ -76,19 +78,19 @@ public class CheckListView extends VerticalLayoutContainer {
 
 			for (final CheckFlow cf : checkFlows) {
 				CheckListInfo item = new CheckListInfo();
-				item.setLY(index * (CheckListInfo.HEIGHT + 5));
+				item.setLY(index * (ITEM_HEIGNT + 5));
 				item.setData(cf);
 				addLayer(item);
 				index++;
 			}
 
-			setHeight(checkFlows.size() * (CheckListInfo.HEIGHT + 5));
+			setHeight(checkFlows.size() * (ITEM_HEIGNT + 5));
 		}
 
 		@Override
 		protected void onResize(int width, int height) {
 			for (LayerSprite layer : getLayers()) {
-				layer.resize(width, CheckListInfo.HEIGHT);
+				layer.resize(width, ITEM_HEIGNT);
 			}
 
 			super.onResize(width, height);

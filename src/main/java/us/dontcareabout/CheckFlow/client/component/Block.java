@@ -4,11 +4,15 @@ import com.sencha.gxt.chart.client.draw.sprite.TextSprite.TextBaseline;
 
 import us.dontcareabout.CheckFlow.client.Formate;
 import us.dontcareabout.CheckFlow.client.Palette;
+import us.dontcareabout.CheckFlow.client.view.CheckListView;
 import us.dontcareabout.gxt.client.draw.LRectangleSprite;
 import us.dontcareabout.gxt.client.draw.LTextSprite;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
 class Block extends LayerSprite {
+	/**
+	 * XXX 等同於 {@link CheckListView#ITEM_HEIGNT}，有空再來解決重複定義的問題
+	 */
 	private static final int HEIGHT = 140;
 	private static final int NUMBER_SIZE = 60;
 	private static final int FOOTER_SIZE = 18;

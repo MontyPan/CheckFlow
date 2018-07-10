@@ -16,11 +16,6 @@ import us.dontcareabout.gxt.client.draw.LTextSprite;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
 public class CheckListInfo extends LayerSprite {
-	public static final int HEIGHT = 140;
-
-	private static final int NAME_SIZE = 40;
-	private static final int FOOTER_SIZE = 18;
-
 	private LTextSprite name = new LTextSprite();
 	private LTextSprite nowCheckPoint = new LTextSprite();
 	private Block reciprocal = new Block("天");
@@ -30,13 +25,13 @@ public class CheckListInfo extends LayerSprite {
 
 	public CheckListInfo() {
 		name.setTextBaseline(TextBaseline.MIDDLE);
-		name.setFontSize(NAME_SIZE);
+		name.setFontSize(40);
 		name.setLX(20);
 		name.setLY(45);
 		add(name);
 
 		nowCheckPoint.setTextBaseline(TextBaseline.MIDDLE);
-		nowCheckPoint.setFontSize(FOOTER_SIZE);
+		nowCheckPoint.setFontSize(18);
 		nowCheckPoint.setLX(40);
 		nowCheckPoint.setLY(95);
 		add(nowCheckPoint);
