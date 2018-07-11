@@ -15,7 +15,7 @@ import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.gxt.client.draw.LTextSprite;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
-public class CheckListInfo extends LayerSprite {
+public class CheckListInfo1 extends LayerSprite {
 	private LTextSprite name = new LTextSprite();
 	private LTextSprite nowCheckPoint = new LTextSprite();
 	private Block reciprocal = new Block("天");
@@ -23,7 +23,7 @@ public class CheckListInfo extends LayerSprite {
 
 	private CheckFlow checkFlow;
 
-	public CheckListInfo() {
+	public CheckListInfo1() {
 		name.setTextBaseline(TextBaseline.MIDDLE);
 		name.setFontSize(40);
 		name.setLX(20);

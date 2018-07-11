@@ -7,7 +7,7 @@ import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelect
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
-import us.dontcareabout.CheckFlow.client.component.CheckListInfo;
+import us.dontcareabout.CheckFlow.client.component.CheckListInfo1;
 import us.dontcareabout.CheckFlow.client.component.ToolItem;
 import us.dontcareabout.CheckFlow.client.component.Toolbar;
 import us.dontcareabout.CheckFlow.client.data.CheckListReadyEvent;
@@ -77,7 +77,7 @@ public class CheckListView extends VerticalLayoutContainer {
 			int index = 0;
 
 			for (final CheckFlow cf : checkFlows) {
-				CheckListInfo item = new CheckListInfo();
+				CheckListInfo1 item = new CheckListInfo1();
 				item.setLY(index * (ITEM_HEIGNT + 5));
 				item.setData(cf);
 				addLayer(item);
