@@ -81,6 +81,19 @@ public class CheckFlow implements Serializable {
 		return 1.0 * getUnfinishPointIndex() / getPointList().size();
 	}
 
+	/**
+	 * @return 所有 {@link CheckPoint#getProgress()} 的平均值。
+	 */
+	public double getAverageProgress() {
+		double result = 0;
+
+		for (CheckPoint cp : getPointList()) {
+			result += cp.getProgress();
+		}
+
+		return result / getPointList().size();
+	}
+
 	public boolean isEnable() {
 		return BitFlag.get(templateFlag, F_ENABLE);
 	}
