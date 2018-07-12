@@ -49,6 +49,12 @@ public class CheckPoint implements Serializable {
 	}
 
 	public double getProgress() {
+		//這不知道該不該算當初殘留 finish 延伸的問題
+		//總之先用這個 WA 處理 finish / progress 的問題
+		if (getItemList().size() == 0) {
+			return isFinish() ? 1 : 0;
+		}
+
 		int count = 0;
 		int total = getItemList().size();
 
