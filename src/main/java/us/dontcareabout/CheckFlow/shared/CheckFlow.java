@@ -72,7 +72,12 @@ public class CheckFlow implements Serializable {
 		return index == getPointList().size() ? null : getPointList().get(index);
 	}
 
-	public double getProgress() {
+	/**
+	 * @return 以步進方式計算的進度，
+	 * 	也就是說，如果第一個 {@link CheckPoint} 沒有完成，無論其他 {@link CheckPoint} 完成多少，
+	 * 	回傳值都為 0。
+	 */
+	public double getStepProgress() {
 		return 1.0 * getUnfinishPointIndex() / getPointList().size();
 	}
 

@@ -43,7 +43,7 @@ public class CheckListInfo1 extends CheckListInfo {
 	}
 
 	private void drawProgress() {
-		progress.setProgress(checkFlow.getProgress());
+		progress.setProgress(checkFlow.getStepProgress());
 	}
 
 }
