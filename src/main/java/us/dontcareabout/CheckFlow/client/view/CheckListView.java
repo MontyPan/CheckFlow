@@ -7,6 +7,7 @@ import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelect
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
+import us.dontcareabout.CheckFlow.client.component.CheckListInfo;
 import us.dontcareabout.CheckFlow.client.component.CheckListInfo1;
 import us.dontcareabout.CheckFlow.client.component.ToolItem;
 import us.dontcareabout.CheckFlow.client.component.Toolbar;
@@ -19,8 +20,6 @@ import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 
 public class CheckListView extends VerticalLayoutContainer {
-	public static final int ITEM_HEIGNT = 140;
-
 	private CheckFlowList list = new CheckFlowList();
 	private Toolbar toolbar = new Toolbar();
 	private VerticalLayoutContainer main = new VerticalLayoutContainer();
@@ -77,20 +76,20 @@ public class CheckListView extends VerticalLayoutContainer {
 			int index = 0;
 
 			for (final CheckFlow cf : checkFlows) {
-				CheckListInfo1 item = new CheckListInfo1();
-				item.setLY(index * (ITEM_HEIGNT + 5));
+				CheckListInfo item = new CheckListInfo1();
+				item.setLY(index * (CheckListInfo.HEIGHT + 5));
 				item.setData(cf);
 				addLayer(item);
 				index++;
 			}
 
-			setHeight(checkFlows.size() * (ITEM_HEIGNT + 5));
+			setHeight(checkFlows.size() * (CheckListInfo.HEIGHT + 5));
 		}
 
 		@Override
 		protected void onResize(int width, int height) {
 			for (LayerSprite layer : getLayers()) {
-				layer.resize(width, ITEM_HEIGNT);
+				layer.resize(width, CheckListInfo.HEIGHT);
 			}
 
 			super.onResize(width, height);
