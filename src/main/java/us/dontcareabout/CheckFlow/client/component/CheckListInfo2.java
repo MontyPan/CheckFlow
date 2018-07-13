@@ -51,8 +51,9 @@ public class CheckListInfo2 extends CheckListInfo {
 		//TODO 寬度過小時 name 與 nowCheckPoint 要縮減字
 		double space = getWidth() - reciprocal.getWidth() - 10;
 
+		progress.setLX(2);
 		progress.setLY(getHeight() - 24);
-		progress.resize(space - 5, 20);
+		progress.resize(space - 3, 20);	//右端要跟 reciprocal 隔 5px，但是左邊又已經留了 2px
 		bottomBorder.setLY(getHeight() - 4);
 		bottomBorder.setWidth(getWidth());
 		bottomBorder.setHeight(2);
@@ -61,8 +62,8 @@ public class CheckListInfo2 extends CheckListInfo {
 		int cpAmount = checkFlow.getPointList().size();
 		double cppWidth = 50;
 
-		if (cppWidth * cpAmount > space) {
-			cppWidth = space / cpAmount;
+		if (cppWidth * cpAmount > space - 2) {
+			cppWidth = (space - 2) / cpAmount;
 		}
 
 		double cppLx = space - (cppWidth * cpAmount);
@@ -81,7 +82,6 @@ public class CheckListInfo2 extends CheckListInfo {
 		CfProgress() {
 			bg.setFill(Palette.BLUE);
 			add(bg);
-			text.setFill(RGB.WHITE);
 			text.setFontSize(15);
 			add(text);
 		}
@@ -99,7 +99,13 @@ public class CheckListInfo2 extends CheckListInfo {
 
 			text.redraw();
 			PreciseRectangle textBox = text.getBBox();
-			text.setLX(bg.getWidth() - textBox.getWidth() - 5);
+			if (bg.getWidth() < textBox.getWidth() + 5) {
+				text.setLX(bg.getWidth() + 5);
+				text.setFill(Palette.BLUE);
+			} else {
+				text.setLX(bg.getWidth() - textBox.getWidth() - 5);
+				text.setFill(RGB.WHITE);
+			}
 		}
 	}
 
