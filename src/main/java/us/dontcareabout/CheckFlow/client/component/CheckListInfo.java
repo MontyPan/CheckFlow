@@ -11,6 +11,7 @@ import com.sencha.gxt.chart.client.draw.sprite.TextSprite.TextBaseline;
 import us.dontcareabout.CheckFlow.client.DateUtil;
 import us.dontcareabout.CheckFlow.client.Formate;
 import us.dontcareabout.CheckFlow.client.Palette;
+import us.dontcareabout.CheckFlow.client.data.Setting;
 import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 import us.dontcareabout.gxt.client.draw.LRectangleSprite;
@@ -20,6 +21,10 @@ import us.dontcareabout.gxt.client.draw.LayerSprite;
 public abstract class CheckListInfo extends LayerSprite{
 	public static final int HEIGHT = 140;
 	static final int NAME_SIZE = 40;
+
+	public static CheckListInfo newInstance() {
+		return Setting.style() ? new CheckListInfo1() : new CheckListInfo2();
+	}
 
 	LTextSprite name = new LTextSprite();
 	Block reciprocal = new Block("天");
@@ -118,4 +123,5 @@ public abstract class CheckListInfo extends LayerSprite{
 			progress.setLY(getHeight() - progress.getHeight());
 		}
 	}
+
 }
