@@ -23,7 +23,7 @@ import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 import us.dontcareabout.gxt.client.draw.component.TextButton;
 
-public class CheckListPanel extends LayerContainer {
+public class CheckListPanel1 extends LayerContainer {
 	private static final int ITEM_HEIGHT = 50;
 	private static final int H_UNIT = 60;
 	private static final int MARGIN = 5;
@@ -206,7 +206,7 @@ public class CheckListPanel extends LayerContainer {
 				add(cil);
 				itemLayers.add(cil);
 				//還沒有真正掛到 DrawComponent 上去，所以補作
-				cil.deploy(CheckListPanel.this);
+				cil.deploy(CheckListPanel1.this);
 			}
 
 			adjustMember();

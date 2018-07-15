@@ -5,7 +5,7 @@ import com.sencha.gxt.chart.client.draw.sprite.SpriteSelectionEvent.SpriteSelect
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
-import us.dontcareabout.CheckFlow.client.component.CheckListPanel;
+import us.dontcareabout.CheckFlow.client.component.CheckListPanel1;
 import us.dontcareabout.CheckFlow.client.component.ToolItem;
 import us.dontcareabout.CheckFlow.client.component.Toolbar;
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
@@ -17,7 +17,7 @@ import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 
 public class CheckListMonitor extends VerticalLayoutContainer {
-	private CheckListPanel list = new CheckListPanel();
+	private CheckListPanel1 list = new CheckListPanel1();
 	private Toolbar toolbar = new Toolbar();
 	private VerticalLayoutContainer main = new VerticalLayoutContainer();
 
