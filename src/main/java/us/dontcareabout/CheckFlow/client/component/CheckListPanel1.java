@@ -23,7 +23,7 @@ import us.dontcareabout.gxt.client.draw.LayerContainer;
 import us.dontcareabout.gxt.client.draw.LayerSprite;
 import us.dontcareabout.gxt.client.draw.component.TextButton;
 
-public class CheckListPanel1 extends LayerContainer {
+public class CheckListPanel1 extends LayerContainer implements CheckListPanel {
 	private static final int ITEM_HEIGHT = 50;
 	private static final int H_UNIT = 60;
 	private static final int MARGIN = 5;
@@ -31,8 +31,10 @@ public class CheckListPanel1 extends LayerContainer {
 
 	private CheckFlow checkList;
 
+	@Override
 	public void setData(CheckFlow cf) {
 		this.checkList = cf;
+		setWidth(0);
 		refresh();
 	}
 
