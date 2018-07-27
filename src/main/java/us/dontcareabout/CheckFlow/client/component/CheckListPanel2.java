@@ -62,8 +62,12 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 		private final CpListLayer list;
 
 		CfDetail(CheckFlow cf) {
-			list = new CpListLayer(cf);
+			list = new CpListLayer(true);
+
+			//要先作 add()，這樣 LayerSprite.asWidget() 才會被 call 到
+			//後面 setData() 要 resize() 的時候才能真正改到 widget 的大小
 			add(list, VLD_1x_1);
+			list.setData(cf.getName(), cf.getPointList());
 		}
 	}
 
@@ -76,8 +80,11 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 				add(new EmptyCpLayer(cp), new VerticalLayoutData(1, 100));
 			} else {
 				VerticalLayoutContainer scroll = new VerticalLayoutContainer();
-				CpListLayer list = new CpListLayer(cp);
+				CpListLayer list = new CpListLayer(false);
+
+				//參見 CfDetail 的 constructor
 				scroll.add(list, VLD_1x_1);
+				list.setData(cp.getName(), cp.getItemList());
 				add(scroll, VLD_1x1);
 			}
 		}
@@ -119,16 +126,22 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 		LTextSprite title = new LTextSprite();
 		ArrayList<CpButton> btnList = new ArrayList<>();
 
-		CpListLayer(CheckFlow cf) {
-			this(cf.getName(), cf.getPointList());
-			isCF = true;
+		CpListLayer(boolean isCF) {
+			this.isCF = isCF;
 		}
 
-		CpListLayer(CheckPoint cp) {
-			this(cp.getName(), cp.getItemList());
+		@Override
+		protected void adjustMember() {
+			int index = 0;
+			for (CpButton btn : btnList) {
+				btn.resize(getWidth() - 4, ITEM_HEIGHT);
+				btn.setLX(2);
+				btn.setLY(index * (ITEM_HEIGHT + 2) + TITLE_HEIGHT);
+				index++;
+			}
 		}
 
-		private CpListLayer(String name, ArrayList<CheckPoint> list) {
+		void setData(String name, ArrayList<CheckPoint> list) {
 			setBgColor(Palette.AMBER[1]);
 
 			title.setLX(5);
@@ -146,17 +159,8 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 				add(btn);
 				btnList.add(btn);
 			}
-		}
 
-		@Override
-		protected void adjustMember() {
-			int index = 0;
-			for (CpButton btn : btnList) {
-				btn.resize(getWidth() - 4, ITEM_HEIGHT);
-				btn.setLX(2);
-				btn.setLY(index * (ITEM_HEIGHT + 2) + TITLE_HEIGHT);
-				index++;
-			}
+			redeploy();
 		}
 
 		class CpButton extends TextButton {
