@@ -35,6 +35,7 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 	@UiField HorizontalLayoutContainer cpContainer;
 
 	private CfDetail cfDetail;
+	private ArrayList<CpDetail> cpDetailList = new ArrayList<>();
 
 	public CheckListPanel2() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -49,10 +50,22 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 		cfDetail = new CfDetail(cf);
 		cfContainer.add(cfDetail, VLD_1x1);
 
-		cpContainer.clear();
+		cpDetailList.clear();
 
 		for (CheckPoint cp : cf.getPointList()) {
-			cpContainer.add(new CpDetail(cp), CP_LIST_HLD);
+			cpDetailList.add(new CpDetail(cp));
+		}
+
+		refresh();
+	}
+
+	 void refresh() {
+		cpContainer.clear();
+
+		for (CpDetail cpd : cpDetailList) {
+			if (!cpd.isShow()) { continue; }
+
+			cpContainer.add(cpd, CP_LIST_HLD);
 		}
 
 		cpContainer.forceLayout();
@@ -72,7 +85,13 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 	}
 
 	class CpDetail extends VerticalLayoutContainer {
+		CheckPoint cp;
+
+		/** 紀錄 CfDetail 要求顯示 CpDetail 的 flag	 */
+		boolean isExpend = true;
+
 		CpDetail(CheckPoint cp) {
+			this.cp = cp;
 			setScrollMode(ScrollMode.AUTOY);
 			setAdjustForScroll(true);
 
@@ -87,6 +106,10 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 				list.setData(cp.getName(), cp.getItemList());
 				add(scroll, VLD_1x1);
 			}
+		}
+
+		boolean isShow() {
+			return !cp.isFinish() || isExpend;
 		}
 	}
 
