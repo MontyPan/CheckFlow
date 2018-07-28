@@ -3,6 +3,12 @@ package us.dontcareabout.CheckFlow.client.component;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
@@ -27,6 +33,7 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 	private static CheckListPanel2UiBinder uiBinder = GWT.create(CheckListPanel2UiBinder.class);
 	interface CheckListPanel2UiBinder extends UiBinder<Widget, CheckListPanel2> {}
 
+	private static final SimpleEventBus eventBus = new SimpleEventBus();
 	private static final VerticalLayoutData VLD_1x_1 = new VerticalLayoutData(1, 1);
 	private static final VerticalLayoutData VLD_1x1 = new VerticalLayoutData(1, -1);
 	private static final HorizontalLayoutData CP_LIST_HLD = new HorizontalLayoutData(200, 1, new Margins(0, 2, 0, 0));
@@ -39,6 +46,18 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 
 	public CheckListPanel2() {
 		initWidget(uiBinder.createAndBindUi(this));
+		eventBus.addHandler(CheckPointChangeEvent.TYPE, new CheckPointChangeHandler() {
+			@Override
+			public void onCheckPointChange(CheckPointChangeEvent event) {
+				refresh();
+			}
+		});
+		eventBus.addHandler(ExpendCheckPointEvent.TYPE, new ExpendCheckPointHandler() {
+			@Override
+			public void onExpendCheckPoint(ExpendCheckPointEvent event) {
+				refresh();
+			}
+		});
 	}
 
 	@Override
@@ -50,7 +69,13 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 		cfDetail = new CfDetail(cf);
 		cfContainer.add(cfDetail, VLD_1x1);
 
+		//清空 cpDetailList 以及各 CpDetail 的 HR
+		for (CpDetail cpd : cpDetailList) {
+			cpd.clearHR();
+		}
+
 		cpDetailList.clear();
+		////
 
 		for (CheckPoint cp : cf.getPointList()) {
 			cpDetailList.add(new CpDetail(cp));
@@ -59,16 +84,27 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 		refresh();
 	}
 
-	 void refresh() {
-		cpContainer.clear();
+	/**
+	 * 套 scheduleDeferred() 是確保來自 {@link #eventBus} 觸發的 refresh()
+	 * 是在各 UI component 都更改完畢狀態之後才更新畫面。
+	 * 對於 {@link #setData(CheckFlow)} 而言是無意義、甚至會造成畫面閃爍的 Orz。
+	 */
+	void refresh() {
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				cfDetail.refresh();
+				cpContainer.clear();
 
-		for (CpDetail cpd : cpDetailList) {
-			if (!cpd.isShow()) { continue; }
+				for (CpDetail cpd : cpDetailList) {
+					if (!cpd.isShow()) { continue; }
 
-			cpContainer.add(cpd, CP_LIST_HLD);
-		}
+					cpContainer.add(cpd, CP_LIST_HLD);
+				}
 
-		cpContainer.forceLayout();
+				cpContainer.forceLayout();
+			}
+		});
 	}
 
 	class CfDetail extends VerticalLayoutContainer {
@@ -82,16 +118,21 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 			add(list, VLD_1x_1);
 			list.setData(cf.getName(), cf.getPointList());
 		}
+
+		void refresh() {
+			list.refresh();
+		}
 	}
 
 	class CpDetail extends VerticalLayoutContainer {
-		CheckPoint cp;
+		HandlerRegistration hr;
+		CheckPoint checkPoint;
 
 		/** 紀錄 CfDetail 要求顯示 CpDetail 的 flag	 */
-		boolean isExpend = true;
+		boolean isExpend = false;
 
 		CpDetail(CheckPoint cp) {
-			this.cp = cp;
+			this.checkPoint = cp;
 			setScrollMode(ScrollMode.AUTOY);
 			setAdjustForScroll(true);
 
@@ -106,10 +147,22 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 				list.setData(cp.getName(), cp.getItemList());
 				add(scroll, VLD_1x1);
 			}
+
+			hr = eventBus.addHandler(ExpendCheckPointEvent.TYPE, new ExpendCheckPointHandler() {
+				@Override
+				public void onExpendCheckPoint(ExpendCheckPointEvent event) {
+					if (event.data != checkPoint) { return; }
+					isExpend = !isExpend;
+				}
+			});
 		}
 
 		boolean isShow() {
-			return !cp.isFinish() || isExpend;
+			return !checkPoint.isFinish() || isExpend;
+		}
+
+		void clearHR() {
+			hr.removeHandler();
 		}
 	}
 
@@ -118,9 +171,9 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 
 	class EmptyCpLayer extends LayerSprite {
 		LTextSprite title = new LTextSprite();
-		TextButton finish = new TextButton("完成");
+		EmptyButton finish;
 
-		EmptyCpLayer(CheckPoint cp) {
+		EmptyCpLayer(final CheckPoint cp) {
 			setBgColor(Palette.AMBER[1]);
 
 			title.setLX(5);
@@ -130,7 +183,15 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 			title.setText(cp.getName());
 			add(title);
 
-			finish.setBgColor(Palette.RED[2]);
+			finish = new EmptyButton(cp);
+			finish.addSpriteSelectionHandler(new SpriteSelectionHandler() {
+				@Override
+				public void onSpriteSelect(SpriteSelectionEvent event) {
+					cp.setFinish(!cp.isFinish());
+					finish.refresh();
+					eventBus.fireEvent(new CheckPointChangeEvent(cp));
+				}
+			});
 			add(finish);
 		}
 
@@ -139,6 +200,13 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 			finish.resize(getWidth() - 14, 40);
 			finish.setLX(7);
 			finish.setLY(TITLE_HEIGHT);
+		}
+
+		class EmptyButton extends CpButton {
+			EmptyButton(CheckPoint cp) {
+				super(cp);
+				setText("完成");
+			}
 		}
 	}
 
@@ -151,6 +219,14 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 
 		CpListLayer(boolean isCF) {
 			this.isCF = isCF;
+		}
+
+		void refresh() {
+			for (CpButton btn : btnList) {
+				btn.refresh();
+			}
+
+			redraw();
 		}
 
 		@Override
@@ -186,24 +262,15 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 			redeploy();
 		}
 
-		class CpButton extends TextButton {
-			final CheckPoint cp;
-
-			CpButton(CheckPoint cp) {
-				this.cp = cp;
-				setBgRadius(10);
-				setText(cp.getName());
-				setBgColor(cp.isFinish() ? Palette.BLUE : Palette.RED[2]);
-			}
-		}
-
 		class CpBtn4Cf extends CpButton {
 			CpBtn4Cf(CheckPoint cp) {
 				super(cp);
 				addSpriteSelectionHandler(new SpriteSelectionHandler() {
 					@Override
 					public void onSpriteSelect(SpriteSelectionEvent event) {
+						if (!checkPoint.isFinish()) { return; }
 
+						eventBus.fireEvent(new ExpendCheckPointEvent(checkPoint));
 					}
 				});
 			}
@@ -214,5 +281,66 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 				super(cp);
 			}
 		}
+	}
+
+	class CpButton extends TextButton {
+		final CheckPoint checkPoint;
+
+		CpButton(CheckPoint cp) {
+			this.checkPoint = cp;
+			setBgRadius(10);
+			setText(cp.getName());
+			refresh();
+		}
+
+		void refresh() {
+			setBgColor(checkPoint.isFinish() ? Palette.BLUE : Palette.RED[2]);
+		}
+	}
+
+	static class CheckPointChangeEvent extends GwtEvent< CheckPointChangeHandler> {
+		static final Type< CheckPointChangeHandler> TYPE = new Type< CheckPointChangeHandler>();
+		public final CheckPoint data;
+
+		public CheckPointChangeEvent(CheckPoint cp) {
+			data = cp;
+		}
+
+		@Override
+		public Type< CheckPointChangeHandler> getAssociatedType() {
+			return TYPE;
+		}
+
+		@Override
+		protected void dispatch(CheckPointChangeHandler handler) {
+			handler.onCheckPointChange(this);
+		}
+	}
+
+	interface CheckPointChangeHandler extends EventHandler{
+		public void onCheckPointChange(CheckPointChangeEvent event);
+	}
+
+	static class ExpendCheckPointEvent extends GwtEvent< ExpendCheckPointHandler> {
+		static final Type< ExpendCheckPointHandler> TYPE = new Type< ExpendCheckPointHandler>();
+		public final CheckPoint data;
+
+		public ExpendCheckPointEvent(CheckPoint result) {
+			data = result;
+		}
+
+		@Override
+		public Type< ExpendCheckPointHandler> getAssociatedType() {
+			return TYPE;
+		}
+
+		@Override
+		protected void dispatch(ExpendCheckPointHandler handler) {
+			handler.onExpendCheckPoint(this);
+		}
+	}
+
+	interface ExpendCheckPointHandler extends EventHandler{
+		public void onExpendCheckPoint(ExpendCheckPointEvent event);
 	}
 }
