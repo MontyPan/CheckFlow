@@ -7,6 +7,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
 import us.dontcareabout.CheckFlow.client.component.CheckListPanel;
 import us.dontcareabout.CheckFlow.client.component.CheckListPanel1;
+import us.dontcareabout.CheckFlow.client.component.CheckListPanel2;
 import us.dontcareabout.CheckFlow.client.component.ToolItem;
 import us.dontcareabout.CheckFlow.client.component.Toolbar;
 import us.dontcareabout.CheckFlow.client.data.DataCenter;
@@ -14,11 +15,12 @@ import us.dontcareabout.CheckFlow.client.data.DelCheckListEndEvent;
 import us.dontcareabout.CheckFlow.client.data.DelCheckListEndEvent.DelCheckListEndHandler;
 import us.dontcareabout.CheckFlow.client.data.SaveCheckListEndEvent;
 import us.dontcareabout.CheckFlow.client.data.SaveCheckListEndEvent.SaveCheckListEndHandler;
+import us.dontcareabout.CheckFlow.client.data.Setting;
 import us.dontcareabout.CheckFlow.client.ui.UiCenter;
 import us.dontcareabout.CheckFlow.shared.CheckFlow;
 
 public class CheckListMonitor extends VerticalLayoutContainer {
-	private CheckListPanel list = new CheckListPanel1();
+	private CheckListPanel list;
 	private Toolbar toolbar = new Toolbar();
 	private VerticalLayoutContainer main = new VerticalLayoutContainer();
 
@@ -26,7 +28,14 @@ public class CheckListMonitor extends VerticalLayoutContainer {
 
 	public CheckListMonitor() {
 		main.setScrollMode(ScrollMode.AUTOY);
-		main.add(list, new VerticalLayoutData(1, -1));
+
+		if (Setting.style()) {
+			list = new CheckListPanel1();
+			main.add(list, new VerticalLayoutData(1, -1));
+		} else {
+			list = new CheckListPanel2();
+			main.add(list, new VerticalLayoutData(1, 1));
+		}
 
 		add(toolbar, new VerticalLayoutData(1, 60));
 		add(main, new VerticalLayoutData(1, 1));
