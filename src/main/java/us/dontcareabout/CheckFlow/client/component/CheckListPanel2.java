@@ -206,7 +206,7 @@ public class CheckListPanel2 extends Composite implements CheckListPanel {
 				@Override
 				public void onSpriteSelect(SpriteSelectionEvent event) {
 					cp.setFinish(!cp.isFinish());
-					refresh();
+					finish.refresh();
 					eventBus.fireEvent(new CheckPointChangeEvent(cp));
 				}
 			});
