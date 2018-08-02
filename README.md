@@ -40,4 +40,19 @@ Build tool 是 Maven，`mvn install` 可得 war 檔。
 放到 Web Server 的 classpath 下。
 `CheckFlow.xml` 的內容參見 [dev-setting.xml]。
 
+修改後需重新啟動 Web Server。
+
 [dev-setting.xml]: https://github.com/MontyPan/CheckFlow/blob/master/src/main/resources/dev-setting.xml
+
+
+顯示風格設定
+============
+
+~~由於案主需求有了接近髮夾彎的改變，~~
+目前預設的顯示風格 **並沒有依照「檢查點之間有前後關係」的邏輯來設計**，
+而是以「檢查點之間各自獨立」的邏輯來設計。
+
+若要恢復「檢查點之間有前後關係」的顯示風格，
+在網址最後加上 `?style=flow`，
+例如原本是 `http:\\localhost:8080\CheckFlow\`，
+改成 `http://localhost:8080/CheckFlow/?style=flow` 即可。
